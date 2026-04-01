@@ -39,9 +39,9 @@ namespace PatternPlus
                     name: "showPreview",
                     value_default: true,
                     key: "ml.editor.showPreview"),
-                new Property_Enum<Patterns.PatternType>(
+                new Property_Enum<PatternsHandler.PatternType>(
                     name: "patternType",
-                    value_default: Patterns.PatternType.Circle,
+                    value_default: PatternsHandler.PatternType.Circle,
                     key: "ml.editor.patternType"),
                 new Property_Bool(
                     name: "isHalf",
@@ -67,7 +67,7 @@ namespace PatternPlus
                     key: "ml.editor.isMidSpin"),
                 new Property_Button(
                     name: "create",
-                    action: () => Patterns.Create(),
+                    action: () => PatternsHandler.Create(),
                     key: "ml.editor.create")
             });
         }
