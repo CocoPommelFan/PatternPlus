@@ -1,6 +1,5 @@
 ﻿using EditorTabLib;
 using EditorTabLib.Properties;
-using PatternPlus.PatternType;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -9,12 +8,6 @@ namespace PatternPlus
 {
     static class CustomTab
     {
-        public enum ToggleBool
-        {
-            Enabled,
-            Disabled
-        }
-
         public static void CreateTab(Sprite icon)
         {
             CustomTabManager.AddTab(icon, 902, "Pattern Plus", new Dictionary<SystemLanguage, string>()
@@ -39,9 +32,9 @@ namespace PatternPlus
                     name: "showPreview",
                     value_default: true,
                     key: "ml.editor.showPreview"),
-                new Property_Enum<PatternsHandler.PatternType>(
+                new Property_Enum<Pattern.PatternType>(
                     name: "patternType",
-                    value_default: PatternsHandler.PatternType.Circle,
+                    value_default: Pattern.PatternType.Circle,
                     key: "ml.editor.patternType"),
                 new Property_Bool(
                     name: "isHalf",
@@ -67,9 +60,18 @@ namespace PatternPlus
                     key: "ml.editor.isMidSpin"),
                 new Property_Button(
                     name: "create",
-                    action: () => PatternsHandler.Create(),
+                    action: () => {
+                        Main.Logger?.Log("clicked");
+                        try {
+                            Pattern.Create();
+                        } catch (System.Exception e) {
+                            Main.Logger?.Log("ERROR: " + e.ToString());
+                        }
+                    },
                     key: "ml.editor.create")
-            });
+            },
+            saveSetting: true
+            );
         }
 
         public static void LoadIconSprite(ref Sprite icon)
