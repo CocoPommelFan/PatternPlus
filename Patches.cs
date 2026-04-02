@@ -1,6 +1,5 @@
 using HarmonyLib;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace PatternPlus
 {
@@ -18,6 +17,7 @@ namespace PatternPlus
     }
     public static class Patches
     {
+
         [HarmonyPatch(typeof(scrController), "Start")]
         public static class ControllerStartPatch
         {
@@ -37,23 +37,14 @@ namespace PatternPlus
             }
         }
 
-        [HarmonyPatch(typeof(scnEditor), "CopyFloor")]
-        public static class EditorStartPatch
+        [HarmonyPatch(typeof(scnEditor), "Awake")]
+        public static class EditorInstance
         {
+            public static scnEditor instance;
+
             public static void Prefix(scnEditor __instance)
             {
-                Main.Logger?.Log($"Copied");
-            }
-
-            public static void Postfix(scnEditor __instance)
-            {
-                foreach(var cp in __instance.clipboard)
-                {
-                    if (cp is scnEditor.FloorData floorData)
-                    Main.Logger?.Log($"Clipboard | {floorData.floatDirection}");
-                }
-
-                Main.Logger?.Log($"{__instance.clipboardContent.ToString()}");
+                instance = __instance;
             }
         }
     }

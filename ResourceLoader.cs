@@ -46,7 +46,7 @@ namespace PatternPlus
         /// </summary>
         /// <param name="fileName">File name relative to Resources folder</param>
         /// <returns>Texture2D or null if failed</returns>
-        public static Texture2D? LoadTexture(string fileName)
+        public static Texture2D LoadTexture(string fileName)
         {
             string filePath = Path.Combine(ResourcesPath, fileName);
             

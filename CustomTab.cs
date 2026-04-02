@@ -1,5 +1,6 @@
 ﻿using EditorTabLib;
 using EditorTabLib.Properties;
+using PatternPlus.PatternType;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -15,11 +16,11 @@ namespace PatternPlus
                 { SystemLanguage.English, "Pattern Plus" },
             }, new List<Property>()
             {
-                new Property_Tile(
-                    name: "startTile",
-                    value_default: (0, TileRelativeTo.Start),
-                    hideButtons: Property_Tile.THIS_TILE,
-                    key: "editor.startTile"),
+                // new Property_Tile(
+                //     name: "startTile",
+                //     value_default: (0, TileRelativeTo.Start),
+                //     hideButtons: Property_Tile.THIS_TILE,
+                //     key: "editor.startTile"),
                 new Property_InputField(
                     name: "tileCount",
                     type: Property_InputField.InputType.Int,
@@ -36,6 +37,14 @@ namespace PatternPlus
                     name: "patternType",
                     value_default: Pattern.PatternType.Circle,
                     key: "ml.editor.patternType"),
+                new Property_InputField(
+                    name: "pseudoAngle",
+                    type: Property_InputField.InputType.Float,
+                    value_default: 30f,
+                    min: 0.001f,
+                    max: 90,
+                    key: "ml.editor.pseudoAngle",
+                    enableIf: new Dictionary<string, string> {{"patternType", "PseudoCircle"}}),
                 new Property_Bool(
                     name: "isHalf",
                     value_default: false,
@@ -47,6 +56,13 @@ namespace PatternPlus
                     min: 0,
                     key: "ml.editor.pseudoEveryNBeat",
                     canBeDisabled: true),
+                new Property_InputField(
+                    name: "pseudoStartOffset",
+                    type: Property_InputField.InputType.Int,
+                    value_default: 0,
+                    min: 0,
+                    key: "ml.editor.pseudoStartOffset"
+                ),
                 new Property_InputField(
                     name: "pseudoKeyCount",
                     type: Property_InputField.InputType.Int,

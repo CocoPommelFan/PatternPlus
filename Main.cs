@@ -9,11 +9,11 @@ namespace PatternPlus
     public static class Main
     {
         public static string ModName = "PatternPlus";
-        public static Sprite? icon;
-        public static UnityModManager.ModEntry? Mod { get; private set; }
-        public static UnityModManager.ModEntry.ModLogger? Logger { get; private set; }
+        public static Sprite icon;
+        public static UnityModManager.ModEntry Mod { get; private set; }
+        public static UnityModManager.ModEntry.ModLogger Logger { get; private set; }
         public static Localization Localization;
-        public static Harmony? Harmony { get; private set; }
+        public static Harmony Harmony { get; private set; }
         public static Settings Settings { get; private set; } = null!;
 
         public static bool Load(UnityModManager.ModEntry modEntry)
