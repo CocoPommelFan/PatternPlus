@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 
 namespace PatternPlus.PatternType
@@ -39,10 +40,27 @@ namespace PatternPlus.PatternType
             return editor.selectedFloors.FirstOrDefault();
         }
 
-        public static float CalculateSetSpeedMultiplier(scrFloor firstPatternFloor)
+        public static float CalculateSetSpeedMultiplier(List<scrFloor> patternFloors)
         {
-            Main.Logger.Log($"{GetFloorFloatDirectionByScrFloor(firstPatternFloor)}");
-            return 1f - (GetFloorFloatDirectionByScrFloor(firstPatternFloor) / 180f);
+            int index = Pattern.IsPseudo ? 1 : 0;
+            float angle = patternFloors[index].floatDirection;
+            float multiplier = Pattern.IsPseudo ? 2f : 1f;
+            float result = (1f - angle / 180f) * multiplier;
+
+            Main.Logger.Log($"=== CalculateSetSpeedMultiplier ===");
+            Main.Logger.Log($"IsPseudo: {Pattern.IsPseudo}");
+            Main.Logger.Log($"Index: {index}");
+            Main.Logger.Log($"Angle: {angle}");
+            Main.Logger.Log($"Multiplier: {multiplier}");
+            Main.Logger.Log($"Result: {result}");
+            Main.Logger.Log($"PatternFloors count: {patternFloors.Count}");
+            
+            for (int i = 0; i < patternFloors.Count; i++)
+            {
+                Main.Logger.Log($"  [{i}] seqID: {patternFloors[i].seqID}, angle: {patternFloors[i].floatDirection}");
+            }
+            
+            return result;
         }
     }
 }

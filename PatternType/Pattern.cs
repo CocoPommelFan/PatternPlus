@@ -1,14 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Permissions;
 using ADOFAI;
 namespace PatternPlus.PatternType
 {
     public static class Pattern
     {
+        public static List<scrFloor> PatternFloors { get; private set; }
         public static scrFloor FirstPatternFloor { get; private set; }       
         public static scrFloor LastPatternFloor { get; private set; }
         public static float[] Angles { get; private set; }
         public static bool IsPseudo { get; private set; }
+        public static float PseudoAngle { get; private set; }
         public enum PatternType
         {
             Circle, PseudoCircle, Test
@@ -29,16 +33,15 @@ namespace PatternPlus.PatternType
             bool isHalf = (bool)levelEvent["isHalf"];
             int tileCount = (int)levelEvent["tileCount"];
             float pseudoAngle = Convert.ToSingle(levelEvent["pseudoAngle"]);
-
             switch (patternType)
             {
                 case PatternType.Circle:
-                    CreateCircle(isHalf, tileCount);
                     IsPseudo = false;
+                    CreateCircle(isHalf, tileCount);
                     break;
                 case PatternType.PseudoCircle:
-                    CreatePseudoCircle(isHalf, tileCount, pseudoAngle);
                     IsPseudo = true;
+                    CreatePseudoCircle(isHalf, tileCount, pseudoAngle);
                     break;
             }
         }
@@ -60,7 +63,7 @@ namespace PatternPlus.PatternType
         private static void BuildPattern(float[] totalAngles)
         {
             var editor = Patches.EditorInstance.instance;
-            
+
             Angles = totalAngles;
 
             foreach (float angle in Angles)
@@ -69,18 +72,14 @@ namespace PatternPlus.PatternType
             }
             
             LastPatternFloor = editor.selectedFloors.FirstOrDefault();
-            
             // +1 ПОТОМУ ЧТО В СПИСКЕ УГЛОВ ПЕРВАЯ ПЛИТКА ИМЕЕТ УГОЛ -999 И ОНА УЧИТЫВАЕТСЯ
             int targetSeqId = LastPatternFloor.seqID - totalAngles.Length + 1;
             
             FirstPatternFloor = editor.floors.FirstOrDefault(f => f.seqID == targetSeqId);
-            
-            Main.Logger.Log($"{FirstPatternFloor.seqID} | {FirstPatternFloor.floatDirection}");
 
-            foreach (var item in editor.floors)
-            {
-                Main.Logger.Log($"{item.seqID} - {item.floatDirection}");
-            }
+            PatternFloors = editor.floors
+                .Where(f => f.seqID >= FirstPatternFloor.seqID && f.seqID <= LastPatternFloor.seqID)
+                .ToList();
 
             EventUtils.AddSetSpeedToPatternStartAndEnd();
         }

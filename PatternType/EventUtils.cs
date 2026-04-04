@@ -14,7 +14,7 @@ public class EventUtils
     {  
         var editor = Patches.EditorInstance.instance;
         
-        float startMultiplier = FloorsUtils.CalculateSetSpeedMultiplier(Pattern.FirstPatternFloor);
+        float startMultiplier = FloorsUtils.CalculateSetSpeedMultiplier(Pattern.PatternFloors);
         float endMultiplier = 1 / startMultiplier;
 
         Main.Logger.Log($"MULTIPLIER: {startMultiplier}");
