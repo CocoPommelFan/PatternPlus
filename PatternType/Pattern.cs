@@ -31,40 +31,49 @@ namespace PatternPlus.PatternType
             PatternType patternType = (PatternType)levelEvent["patternType"];
 
             bool isHalf = (bool)levelEvent["isHalf"];
+            bool isInversed = (bool)levelEvent["isInversed"];
             int tileCount = (int)levelEvent["tileCount"];
             float pseudoAngle = Convert.ToSingle(levelEvent["pseudoAngle"]);
             switch (patternType)
             {
                 case PatternType.Circle:
                     IsPseudo = false;
-                    CreateCircle(isHalf, tileCount);
+                    CreateCircle(isHalf, tileCount, isInversed);
                     break;
                 case PatternType.PseudoCircle:
                     IsPseudo = true;
-                    CreatePseudoCircle(isHalf, tileCount, pseudoAngle);
+                    CreatePseudoCircle(isHalf, tileCount, pseudoAngle, isInversed);
                     break;
             }
         }
 
-        private static void CreateCircle(bool isHalf, int tileCount)
+        private static void CreateCircle(bool isHalf, int tileCount, bool isInversed)
         {
             float[] totalAngles = PatternUtils.CalculateCircleAngles(tileCount: tileCount, isHalf: isHalf);
-            BuildPattern(totalAngles);
+            BuildPattern(totalAngles, isInversed);
         }
 
-        private static void CreatePseudoCircle(bool isHalf, int tileCount, float pseudoAngle)
+        private static void CreatePseudoCircle(bool isHalf, int tileCount, float pseudoAngle, bool isInversed)
         {
             float firstAngle = (isHalf ? 180f : 360f) / tileCount;
             float[] totalAngles = PatternUtils.CalculateCircleAngles(tileCount: tileCount, isHalf: isHalf);
             float[] totalAnglesWithPseudos = PatternUtils.CalculatePseudoEveryNBeat(totalAngles: totalAngles, pseudoAngle: pseudoAngle, step: firstAngle);
-            BuildPattern(totalAnglesWithPseudos);
+            BuildPattern(totalAnglesWithPseudos, isInversed);
         }
 
-        private static void BuildPattern(float[] totalAngles)
+        private static void BuildPattern(float[] totalAngles, bool isInversed)
         {
             var editor = Patches.EditorInstance.instance;
 
             Angles = totalAngles;
+
+            if (isInversed)
+            {
+                for (int i = 0; i < totalAngles.Length; i++)
+                {
+                    totalAngles[i] *= -1;
+                }
+            }
 
             foreach (float angle in Angles)
             {
@@ -81,7 +90,11 @@ namespace PatternPlus.PatternType
                 .Where(f => f.seqID >= FirstPatternFloor.seqID && f.seqID <= LastPatternFloor.seqID)
                 .ToList();
 
+            // ДОП ПЛИТКА ЧТОБЫ НЕ ОБОСРАТЬСЯ
+            editor.CreateFloorWithCharOrAngle(Angles.Last(), 'a');
+
             EventUtils.AddSetSpeedToPatternStartAndEnd();
+            EventUtils.AddRadiusScaleToWholePattern();
         }
     }
 }

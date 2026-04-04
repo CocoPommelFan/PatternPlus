@@ -44,6 +44,38 @@ namespace PatternPlus
                     name: "isHalf",
                     value_default: false,
                     key: "ml.editor.isHalf"),
+                new Property_Bool(
+                    name: "isInversed",
+                    value_default: false,
+                    key: "ml.editor.isInversed"),
+                new Property_InputField(
+                    name: "radiusScale1",
+                    type: Property_InputField.InputType.Float,
+                    value_default: 100,
+                    min: 100,
+                    max: 500,
+                    key: "ml.editor.radiusScale1"),
+                new Property_InputField(
+                    name: "radiusScale2",
+                    type: Property_InputField.InputType.Float,
+                    value_default: 100,
+                    min: 100,
+                    max: 500,
+                    key: "ml.editor.radiusScale2"),
+                new Property_InputField(
+                    name: "tileScale",
+                    type: Property_InputField.InputType.Float,
+                    value_default: 100,
+                    min: 100,
+                    max: 500,
+                    key: "ml.editor.tileScale"),
+                new Property_InputField(
+                    name: "pseudoKeyCount",
+                    type: Property_InputField.InputType.Int,
+                    value_default: 2,
+                    min: 1,
+                    max: 32,
+                    key: "ml.editor.pseudoKeyCount"),
                 new Property_InputField(
                     name: "pseudoEveryNBeat",
                     type: Property_InputField.InputType.Int,
@@ -58,31 +90,10 @@ namespace PatternPlus
                     min: 0,
                     key: "ml.editor.pseudoStartOffset"
                 ),
-                new Property_InputField(
-                    name: "pseudoKeyCount",
-                    type: Property_InputField.InputType.Int,
-                    value_default: 2,
-                    min: 1,
-                    max: 32,
-                    key: "ml.editor.pseudoKeyCount"),
                 new Property_Bool(
                     name: "isMidSpin",
                     value_default: false,
                     key: "ml.editor.isMidSpin"),
-                new Property_InputField(
-                    name: "radiusScale1",
-                    type: Property_InputField.InputType.Int,
-                    value_default: 100,
-                    min: 100,
-                    max: 500,
-                    key: "ml.editor.radiusScale1"),
-                new Property_InputField(
-                    name: "radiusScale2",
-                    type: Property_InputField.InputType.Int,
-                    value_default: 100,
-                    min: 100,
-                    max: 500,
-                    key: "ml.editor.radiusScale2"),
                 new Property_Button(
                     name: "create",
                     action: () => {

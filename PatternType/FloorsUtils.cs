@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
 using System.Linq;
 
 namespace PatternPlus.PatternType
@@ -19,8 +21,8 @@ namespace PatternPlus.PatternType
             if (selectedFloor == null)
                 Main.Logger.Log("No floor selected");
 
-            return selectedFloor.floatDirection == LEFT_DIRECTION 
-                ? TileDirection.Left 
+            return Math.Abs(selectedFloor.floatDirection) == LEFT_DIRECTION 
+                ? TileDirection.Left
                 : TileDirection.Right;
         }
         public static float GetFloorFloatDirectionByScrFloor(scrFloor floor)
@@ -42,24 +44,17 @@ namespace PatternPlus.PatternType
 
         public static float CalculateSetSpeedMultiplier(List<scrFloor> patternFloors)
         {
+            // IF TILE == 180* THEN (ANGLE - 180) * 1
+
             int index = Pattern.IsPseudo ? 1 : 0;
-            float angle = patternFloors[index].floatDirection;
+
+            bool isMirrored = Patches.EditorInstance.instance.floors[patternFloors[0].seqID - 1].floatDirection == 180 ? true : false;
+
+            float rawAngle = Math.Abs(patternFloors[index].floatDirection);
+            float angle = isMirrored ? Math.Abs(rawAngle - 180) : rawAngle;
             float multiplier = Pattern.IsPseudo ? 2f : 1f;
             float result = (1f - angle / 180f) * multiplier;
 
-            Main.Logger.Log($"=== CalculateSetSpeedMultiplier ===");
-            Main.Logger.Log($"IsPseudo: {Pattern.IsPseudo}");
-            Main.Logger.Log($"Index: {index}");
-            Main.Logger.Log($"Angle: {angle}");
-            Main.Logger.Log($"Multiplier: {multiplier}");
-            Main.Logger.Log($"Result: {result}");
-            Main.Logger.Log($"PatternFloors count: {patternFloors.Count}");
-            
-            for (int i = 0; i < patternFloors.Count; i++)
-            {
-                Main.Logger.Log($"  [{i}] seqID: {patternFloors[i].seqID}, angle: {patternFloors[i].floatDirection}");
-            }
-            
             return result;
         }
     }
