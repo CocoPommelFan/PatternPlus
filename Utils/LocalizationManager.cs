@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace PatternPlus
+namespace PatternPlus.Utils
 {
     public static class LocalizationUtils
     {

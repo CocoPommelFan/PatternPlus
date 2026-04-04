@@ -1,8 +1,9 @@
 using System;
 using System.IO;
 using UnityEngine;
+using PatternPlus.Core;
 
-namespace PatternPlus
+namespace PatternPlus.Utils
 {
     public static class ResourceLoader
     {

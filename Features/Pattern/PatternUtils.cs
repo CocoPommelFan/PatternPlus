@@ -1,7 +1,8 @@
 using System;
 using System.Linq;
+using PatternPlus.Features.Speed;
 
-namespace PatternPlus.PatternType
+namespace PatternPlus.Features.Pattern
 {
     public static class PatternUtils
     {
@@ -15,9 +16,9 @@ namespace PatternPlus.PatternType
             float[] totalAngles = new float[tileCount];
             float step = firstAngle;
 
-            FloorsUtils.TileDirection direction = FloorsUtils.GetCurrentTileDirection();
+            SpeedCalculator.TileDirection direction = SpeedCalculator.GetCurrentTileDirection();
 
-            if (direction == FloorsUtils.TileDirection.Left)
+            if (direction == SpeedCalculator.TileDirection.Left)
             {
                 CalculateLeftDirectionAngles(totalAngles, ref firstAngle, step, tileCount);
             }
@@ -34,7 +35,7 @@ namespace PatternPlus.PatternType
             if (totalAngles == null || totalAngles.Length == 0)
                 throw new ArgumentException("Total angles cannot be null or empty", nameof(totalAngles));
 
-            FloorsUtils.TileDirection direction = FloorsUtils.GetCurrentTileDirection();
+            SpeedCalculator.TileDirection direction = SpeedCalculator.GetCurrentTileDirection();
 
             float[] pseudoAngles = CalculatePseudoAngles(totalAngles.Length, step, pseudoAngle, direction);
 
@@ -68,11 +69,11 @@ namespace PatternPlus.PatternType
             }
         }
 
-        private static float[] CalculatePseudoAngles(int count, float step, float pseudoAngle, FloorsUtils.TileDirection direction)
+        private static float[] CalculatePseudoAngles(int count, float step, float pseudoAngle, SpeedCalculator.TileDirection direction)
         {
             float firstPseudoAngle;
 
-            if (direction == FloorsUtils.TileDirection.Left)
+            if (direction == SpeedCalculator.TileDirection.Left)
             {
                 firstPseudoAngle = ZERO_ANGLE + pseudoAngle;
                 return Enumerable.Range(0, count)

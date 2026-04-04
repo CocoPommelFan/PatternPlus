@@ -1,7 +1,7 @@
 using UnityModManagerNet;
 using UnityEngine;
 
-namespace PatternPlus
+namespace PatternPlus.Core
 {
     public class Settings : UnityModManager.ModSettings
     {

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Permissions;
 using ADOFAI;
-namespace PatternPlus.PatternType
+using PatternPlus.Core;
+using PatternPlus.Features.Events;
+
+namespace PatternPlus.Features.Pattern
 {
     public static class Pattern
     {
@@ -24,7 +26,7 @@ namespace PatternPlus.PatternType
 
             if (levelEvent == null)
             {
-                Main.Logger.Log("LevelEvent is null");
+                Core.Main.Logger.Log("LevelEvent is null");
                 return;
             }
 
@@ -63,7 +65,7 @@ namespace PatternPlus.PatternType
 
         private static void BuildPattern(float[] totalAngles, bool isInversed)
         {
-            var editor = Patches.EditorInstance.instance;
+            var editor = Core.Patches.EditorInstance.instance;
 
             Angles = totalAngles;
 
@@ -93,8 +95,8 @@ namespace PatternPlus.PatternType
             // ДОП ПЛИТКА ЧТОБЫ НЕ ОБОСРАТЬСЯ
             editor.CreateFloorWithCharOrAngle(Angles.Last(), 'a');
 
-            EventUtils.AddSetSpeedToPatternStartAndEnd();
-            EventUtils.AddRadiusScaleToWholePattern();
+            EventManager.AddSetSpeedToPatternStartAndEnd();
+            EventManager.AddRadiusScaleToWholePattern();
         }
     }
 }

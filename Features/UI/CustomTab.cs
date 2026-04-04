@@ -1,11 +1,11 @@
 ﻿using EditorTabLib;
 using EditorTabLib.Properties;
-using PatternPlus.PatternType;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using static PatternPlus.Features.Pattern.Pattern;
 
-namespace PatternPlus
+namespace PatternPlus.Features.UI
 {
     static class CustomTab
     {
@@ -28,9 +28,9 @@ namespace PatternPlus
                     name: "showPreview",
                     value_default: true,
                     key: "ml.editor.showPreview"),
-                new Property_Enum<Pattern.PatternType>(
+                new Property_Enum<PatternType>(
                     name: "patternType",
-                    value_default: Pattern.PatternType.Circle,
+                    value_default: PatternType.Circle,
                     key: "ml.editor.patternType"),
                 new Property_InputField(
                     name: "pseudoAngle",
@@ -97,14 +97,14 @@ namespace PatternPlus
                 new Property_Button(
                     name: "create",
                     action: () => {
-                        scnEditor editor = Patches.EditorInstance.instance;
+                        scnEditor editor = Core.Patches.EditorInstance.instance;
                         
                         if (!editor.SelectionIsSingle() || editor.SelectionIsEmpty())
                         {
                             return;
                         }
                         
-                        Pattern.Create();
+                        Pattern.Pattern.Create();
                     },
                     key: "ml.editor.create")
             },
@@ -114,7 +114,7 @@ namespace PatternPlus
 
         public static void LoadIconSprite(ref Sprite icon)
         {
-            string path = Path.Combine(Directory.GetCurrentDirectory(), "Mods", Main.ModName, "Resources", "icon_pattern.png");
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "Mods", Core.Main.ModName, "Resources", "icon_pattern.png");
             if (File.Exists(path))
             {
                 if (File.Exists(path))

@@ -1,7 +1,7 @@
 using HarmonyLib;
 using System.Collections.Generic;
 
-namespace PatternPlus
+namespace PatternPlus.Core
 {
     [HarmonyPatch(typeof(RDString), "GetWithCheck")]
     public static class GetWithCheck

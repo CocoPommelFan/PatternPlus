@@ -3,8 +3,10 @@ using HarmonyLib;
 using UnityEngine;
 using Localizations;
 using UnityModManagerNet;
+using PatternPlus.Features.UI;
+using PatternPlus.Utils;
 
-namespace PatternPlus
+namespace PatternPlus.Core
 {
     public static class Main
     {

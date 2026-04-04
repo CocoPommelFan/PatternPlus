@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design.Serialization;
 using System.Linq;
+using PatternPlus.Core;
 
-namespace PatternPlus.PatternType
+namespace PatternPlus.Features.Speed
 {
-    public static class FloorsUtils
+    public static class SpeedCalculator
     {
         private const float LEFT_DIRECTION = 180f;
 
@@ -17,9 +17,9 @@ namespace PatternPlus.PatternType
 
         public static TileDirection GetCurrentTileDirection()
         {
-            var selectedFloor = Patches.EditorInstance.instance?.selectedFloors?.FirstOrDefault();
+            var selectedFloor = Core.Patches.EditorInstance.instance?.selectedFloors?.FirstOrDefault();
             if (selectedFloor == null)
-                Main.Logger.Log("No floor selected");
+                Core.Main.Logger.Log("No floor selected");
 
             return Math.Abs(selectedFloor.floatDirection) == LEFT_DIRECTION 
                 ? TileDirection.Left
@@ -31,7 +31,7 @@ namespace PatternPlus.PatternType
         }
         public static int GetFirstPatternFloorSeqID()
         {
-            return Pattern.FirstPatternFloor.seqID;
+            return Pattern.Pattern.FirstPatternFloor.seqID;
 
         }
         public static scrFloor GetFirstPatternFloor(scnEditor editor)
@@ -46,13 +46,13 @@ namespace PatternPlus.PatternType
         {
             // IF TILE == 180* THEN (ANGLE - 180) * 1
 
-            int index = Pattern.IsPseudo ? 1 : 0;
+            int index = Pattern.Pattern.IsPseudo ? 1 : 0;
 
-            bool isMirrored = Patches.EditorInstance.instance.floors[patternFloors[0].seqID - 1].floatDirection == 180 ? true : false;
+            bool isMirrored = Core.Patches.EditorInstance.instance.floors[patternFloors[0].seqID - 1].floatDirection == 180 ? true : false;
 
             float rawAngle = Math.Abs(patternFloors[index].floatDirection);
             float angle = isMirrored ? Math.Abs(rawAngle - 180) : rawAngle;
-            float multiplier = Pattern.IsPseudo ? 2f : 1f;
+            float multiplier = Pattern.Pattern.IsPseudo ? 2f : 1f;
             float result = (1f - angle / 180f) * multiplier;
 
             return result;
