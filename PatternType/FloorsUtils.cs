@@ -1,7 +1,4 @@
-using System;
 using System.Linq;
-using Discord;
-using UnityEngine.UIElements;
 
 namespace PatternPlus.PatternType
 {

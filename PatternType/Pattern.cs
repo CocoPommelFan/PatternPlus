@@ -15,8 +15,6 @@ namespace PatternPlus.PatternType
         }
         public static void Create()
         {
-            var editor = Patches.EditorInstance.instance;
-
             // получение вкладки вкладки
             LevelEvent levelEvent = EditorTabLib.CustomTabManager.GetEvent((LevelEventType)902);
 
@@ -35,32 +33,34 @@ namespace PatternPlus.PatternType
             switch (patternType)
             {
                 case PatternType.Circle:
-                    CreateCircle(editor, isHalf, tileCount);
+                    CreateCircle(isHalf, tileCount);
                     IsPseudo = false;
                     break;
                 case PatternType.PseudoCircle:
-                    CreatePseudoCircle(editor, isHalf, tileCount, pseudoAngle);
+                    CreatePseudoCircle(isHalf, tileCount, pseudoAngle);
                     IsPseudo = true;
                     break;
             }
         }
 
-        private static void CreateCircle(scnEditor editor, bool isHalf, int tileCount)
+        private static void CreateCircle(bool isHalf, int tileCount)
         {
             float[] totalAngles = PatternUtils.CalculateCircleAngles(tileCount: tileCount, isHalf: isHalf);
-            BuildPattern(editor, totalAngles);
+            BuildPattern(totalAngles);
         }
 
-        private static void CreatePseudoCircle(scnEditor editor, bool isHalf, int tileCount, float pseudoAngle)
+        private static void CreatePseudoCircle(bool isHalf, int tileCount, float pseudoAngle)
         {
             float firstAngle = (isHalf ? 180f : 360f) / tileCount;
             float[] totalAngles = PatternUtils.CalculateCircleAngles(tileCount: tileCount, isHalf: isHalf);
             float[] totalAnglesWithPseudos = PatternUtils.CalculatePseudoEveryNBeat(totalAngles: totalAngles, pseudoAngle: pseudoAngle, step: firstAngle);
-            BuildPattern(editor, totalAnglesWithPseudos);
+            BuildPattern(totalAnglesWithPseudos);
         }
 
-        private static void BuildPattern(scnEditor editor, float[] totalAngles)
+        private static void BuildPattern(float[] totalAngles)
         {
+            var editor = Patches.EditorInstance.instance;
+            
             Angles = totalAngles;
 
             foreach (float angle in Angles)
@@ -82,7 +82,7 @@ namespace PatternPlus.PatternType
                 Main.Logger.Log($"{item.seqID} - {item.floatDirection}");
             }
 
-            EventUtils.AddSetSpeedToPatternStart(editor);
+            EventUtils.AddSetSpeedToPatternStartAndEnd();
         }
     }
 }

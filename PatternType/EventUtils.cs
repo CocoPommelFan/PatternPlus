@@ -10,18 +10,28 @@ public class EventUtils
         Bpm, Multiplier
     }
     
-    public static void AddSetSpeedToPatternStart(scnEditor editor)
+    public static void AddSetSpeedToPatternStartAndEnd()
     {  
-        float multiplier = FloorsUtils.CalculateSetSpeedMultiplier(Pattern.FirstPatternFloor);
+        var editor = Patches.EditorInstance.instance;
+        
+        float startMultiplier = FloorsUtils.CalculateSetSpeedMultiplier(Pattern.FirstPatternFloor);
+        float endMultiplier = 1 / startMultiplier;
 
-        Main.Logger.Log($"MULTIPLIER: {multiplier}");
+        Main.Logger.Log($"MULTIPLIER: {startMultiplier}");
 
+        // В НАЧАЛЕ ПАТТЕРНА
         // -1 ПОТОМУ ЧТО ПРИ ДОБАВЛЕНИИ ИВЕНТА НЕ УЧИТЫВАЕТСЯ ПЕРВАЯ ПЛИТКА В floors С -999 ГРАДУСОМ
-        LevelEvent startEvent = new LevelEvent(FloorsUtils.GetFirstPatternFloorSeqID() - 1, LevelEventType.SetSpeed);
-        startEvent["speedType"] = MultiplyType.Multiplier;
-        startEvent["bpmMultiplier"] = multiplier;
+        LevelEvent startSetSpeed = new LevelEvent(Pattern.FirstPatternFloor.seqID - 1, LevelEventType.SetSpeed);
+        startSetSpeed["speedType"] = MultiplyType.Multiplier;
+        startSetSpeed["bpmMultiplier"] = startMultiplier;
 
-        editor.events.Add(startEvent);
+        // В КОНЦЕ ПАТТЕРНА
+        LevelEvent endSetSpeed = new LevelEvent(Pattern.LastPatternFloor.seqID, LevelEventType.SetSpeed);
+        endSetSpeed["speedType"] = MultiplyType.Multiplier;
+        endSetSpeed["bpmMultiplier"] = endMultiplier;
+
+        editor.events.Add(startSetSpeed);
+        editor.events.Add(endSetSpeed);
 
         editor.ApplyEventsToFloors();
     }
