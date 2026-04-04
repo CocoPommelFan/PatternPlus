@@ -49,9 +49,6 @@ namespace PatternPlus
                 Harmony?.PatchAll(Assembly.GetExecutingAssembly());
 
                 CustomTab.CreateTab(icon);
-
-                // Test resource loading
-                TestResourceLoading();
             }
             else
             {
@@ -59,28 +56,6 @@ namespace PatternPlus
                 Harmony?.UnpatchAll();
             }
             return true;
-        }
-
-        private static void TestResourceLoading()
-        {
-            Mod?.Logger.Log("=== Testing Resource Loading ===");
-            
-            // Test loading text file
-            string testText = ResourceLoader.LoadTextFile("test.txt");
-            if (!string.IsNullOrEmpty(testText))
-            {
-                Mod?.Logger.Log($"Test text content / 测试文本内容:\n{testText}");
-            }
-            
-            // List all files in Resources folder
-            string[] files = ResourceLoader.GetFiles();
-            Mod?.Logger.Log($"Found {files.Length} file(s) in Resources folder / 在 Resources 文件夹中找到 {files.Length} 个文件:");
-            foreach (string file in files)
-            {
-                Mod?.Logger.Log($"  - {file}");
-            }
-            
-            Mod?.Logger.Log("=== Resource Loading Test Complete / 资源加载测试完成 ===");
         }
     }
 }

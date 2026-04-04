@@ -16,11 +16,6 @@ namespace PatternPlus
                 { SystemLanguage.English, "Pattern Plus" },
             }, new List<Property>()
             {
-                // new Property_Tile(
-                //     name: "startTile",
-                //     value_default: (0, TileRelativeTo.Start),
-                //     hideButtons: Property_Tile.THIS_TILE,
-                //     key: "editor.startTile"),
                 new Property_InputField(
                     name: "tileCount",
                     type: Property_InputField.InputType.Int,
@@ -74,15 +69,31 @@ namespace PatternPlus
                     name: "isMidSpin",
                     value_default: false,
                     key: "ml.editor.isMidSpin"),
+                new Property_InputField(
+                    name: "radiusScale1",
+                    type: Property_InputField.InputType.Int,
+                    value_default: 100,
+                    min: 100,
+                    max: 500,
+                    key: "ml.editor.radiusScale1"),
+                new Property_InputField(
+                    name: "radiusScale2",
+                    type: Property_InputField.InputType.Int,
+                    value_default: 100,
+                    min: 100,
+                    max: 500,
+                    key: "ml.editor.radiusScale2"),
                 new Property_Button(
                     name: "create",
                     action: () => {
-                        Main.Logger?.Log("clicked");
-                        try {
-                            Pattern.Create();
-                        } catch (System.Exception e) {
-                            Main.Logger?.Log("ERROR: " + e.ToString());
+                        scnEditor editor = Patches.EditorInstance.instance;
+                        
+                        if (!editor.SelectionIsSingle() || editor.SelectionIsEmpty())
+                        {
+                            return;
                         }
+                        
+                        Pattern.Create();
                     },
                     key: "ml.editor.create")
             },

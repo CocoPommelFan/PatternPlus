@@ -1,68 +1,91 @@
+using System;
 using System.Linq;
-using ADOFAI;
 
 namespace PatternPlus.PatternType
 {
     public static class PatternUtils
     {
+        private const float FULL_CIRCLE = 360f;
+        private const float HALF_CIRCLE = 180f;
+        private const float ZERO_ANGLE = 0f;
+
         public static float[] CalculateCircleAngles(int tileCount, bool isHalf)
-        {   
-            float firstAngle =  (isHalf ? 180f : 360f) / tileCount;
+        {
+            float firstAngle = (isHalf ? HALF_CIRCLE : FULL_CIRCLE) / tileCount;
             float[] totalAngles = new float[tileCount];
             float step = firstAngle;
-            if (Patches.EditorInstance.instance.selectedFloors[0].floatDirection == 180f) 
+
+            FloorsUtils.TileDirection direction = FloorsUtils.GetCurrentTileDirection();
+
+            if (direction == FloorsUtils.TileDirection.Left)
             {
-                firstAngle = 180 - firstAngle;
-
-                for (int i = 0; i < tileCount; i++)
-                {
-                    totalAngles[i] = firstAngle;
-                    firstAngle -= step;
-
-                    if (UnityEngine.Mathf.Approximately(firstAngle, 0f))
-                        firstAngle = 360;
-                }
+                CalculateLeftDirectionAngles(totalAngles, ref firstAngle, step, tileCount);
             }
             else
             {
-                for (int i = 0; i < tileCount; i++)
-                {
-                    totalAngles[i] = firstAngle;
-                    firstAngle += step;
-                }
+                CalculateRightDirectionAngles(totalAngles, ref firstAngle, step, tileCount);
             }
+
             return totalAngles;
         }
 
         public static float[] CalculatePseudoEveryNBeat(float[] totalAngles, float step, int beatCount = 0, float pseudoAngle = 30)
-        { 
-            float[] anglesWithPseudo = new float[totalAngles.Length * 2];
-            float firstPseudoAngle;
-            float[] pseudoAngles = null;
+        {
+            if (totalAngles == null || totalAngles.Length == 0)
+                throw new ArgumentException("Total angles cannot be null or empty", nameof(totalAngles));
 
-            // если дорога идёт налево, т.е. угол развёртнутой плитки 180*. значит первая псевда это 30* -> 30 - 45 -> 30 - 90 ...
-            // если дорога идёт направо, т.е. угол развёртнутой плитки 0*. значит первая псевда это 150* -> 150 + 45 -> 150 + 90 ...
-            if (Patches.EditorInstance.instance.selectedFloors[0].floatDirection == 180f)
+            FloorsUtils.TileDirection direction = FloorsUtils.GetCurrentTileDirection();
+
+            float[] pseudoAngles = CalculatePseudoAngles(totalAngles.Length, step, pseudoAngle, direction);
+
+            float[] result = Enumerable.Range(0, pseudoAngles.Length + totalAngles.Length)
+                .Select(i => i % 2 == 0 ? pseudoAngles[i / 2] : totalAngles[i / 2])
+                .ToArray();
+
+            return result;
+        }
+
+        private static void CalculateLeftDirectionAngles(float[] totalAngles, ref float firstAngle, float step, int tileCount)
+        {
+            firstAngle = HALF_CIRCLE - firstAngle;
+
+            for (int i = 0; i < tileCount; i++)
             {
-                firstPseudoAngle = 0 + pseudoAngle;
-                pseudoAngles = Enumerable.Range(0, totalAngles.Length)
+                totalAngles[i] = firstAngle;
+                firstAngle -= step;
+
+                if (UnityEngine.Mathf.Approximately(firstAngle, ZERO_ANGLE))
+                    firstAngle = FULL_CIRCLE;
+            }
+        }
+
+        private static void CalculateRightDirectionAngles(float[] totalAngles, ref float firstAngle, float step, int tileCount)
+        {
+            for (int i = 0; i < tileCount; i++)
+            {
+                totalAngles[i] = firstAngle;
+                firstAngle += step;
+            }
+        }
+
+        private static float[] CalculatePseudoAngles(int count, float step, float pseudoAngle, FloorsUtils.TileDirection direction)
+        {
+            float firstPseudoAngle;
+
+            if (direction == FloorsUtils.TileDirection.Left)
+            {
+                firstPseudoAngle = ZERO_ANGLE + pseudoAngle;
+                return Enumerable.Range(0, count)
                     .Select(i => firstPseudoAngle - step * i)
                     .ToArray();
             }
             else
             {
-                firstPseudoAngle = 180 - pseudoAngle;
-
-                pseudoAngles = Enumerable.Range(0, totalAngles.Length)
+                firstPseudoAngle = HALF_CIRCLE - pseudoAngle;
+                return Enumerable.Range(0, count)
                     .Select(i => firstPseudoAngle + step * i)
                     .ToArray();
             }
-
-            float[] result = Enumerable.Range(0, pseudoAngles.Length + totalAngles.Length)
-                .Select(i => i % 2 == 0 ? pseudoAngles[i / 2] : totalAngles[i / 2])
-                .ToArray();
-                
-            return result;
         }
     }
 }

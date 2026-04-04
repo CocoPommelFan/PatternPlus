@@ -17,26 +17,6 @@ namespace PatternPlus
     }
     public static class Patches
     {
-
-        [HarmonyPatch(typeof(scrController), "Start")]
-        public static class ControllerStartPatch
-        {
-            public static void Prefix(scrController __instance)
-            {
-                Main.Logger?.Log("Controller start");
-            }
-            public static void Postfix(scrController __instance)
-            {
-                Main.Logger?.Log("Controller started");
-
-                // Example: Use settings
-                if (Main.Settings.EnableFeature)
-                {
-                    Main.Logger?.Log($"Feature enabled, example value: {Main.Settings.ExampleValue}");
-                }
-            }
-        }
-
         [HarmonyPatch(typeof(scnEditor), "Awake")]
         public static class EditorInstance
         {
