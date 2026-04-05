@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using PatternPlus.Core;
 
 namespace PatternPlus.Features.Speed
 {
@@ -52,9 +51,11 @@ namespace PatternPlus.Features.Speed
 
             float rawAngle = Math.Abs(patternFloors[index].floatDirection);
             float angle = isMirrored ? Math.Abs(rawAngle - 180) : rawAngle;
-            float multiplier = Pattern.Pattern.IsPseudo ? 2f : 1f;
-            float result = (1f - angle / 180f) * multiplier;
-
+            float result;
+            if (Pattern.Pattern.IsPseudo)
+                result = 1f - angle / 180f + 1;
+            else
+                result = 1f - angle / 180f;
             return result;
         }
     }
