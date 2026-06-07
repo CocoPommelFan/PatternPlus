@@ -1,0 +1,12 @@
+{ 
+  "Id": "PatternPlus", 
+  "DisplayName": "PatternPlus", 
+  "Author": "fallen6", 
+  "Version": "1.0.0", 
+  "ManagerVersion": "0.32.4", 
+  "Requirements": ["EditorTabLib", "Localizations"], 
+  "AssemblyName": "PatternPlus.dll", 
+  "EntryMethod": "PatternPlus.Main.Load", 
+  "HomePage": "", 
+  "Repository": "https://github.com/CocoPommelFan/PatternPlus" 
+} 
