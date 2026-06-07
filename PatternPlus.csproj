@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net481</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <OutputType>Library</OutputType>
     <RootNamespace>PatternPlus</RootNamespace>
     <AssemblyName>PatternPlus</AssemblyName>
@@ -21,10 +21,10 @@
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
-    <GameExePath>D:\SteamLibrary\steamapps\common\A Dance of Fire and Ice\A Dance of Fire and Ice.exe</GameExePath>
+    <GameExePath>C:\Program Files (x86)\Steam\steamapps\common\A Dance of Fire and Ice\A Dance of Fire and Ice.exe</GameExePath>
     <AutoLaunchGame>true</AutoLaunchGame>
   </PropertyGroup>
-  <!-- 根据 GameExePath 计算托管程序集路径 / Calculate managed assemblies path from GameExePath -->
+	
   <PropertyGroup Condition="'$(GameExePath)' != ''">
     <GameDir>$([System.IO.Path]::GetDirectoryName($(GameExePath)))</GameDir>
     <GameFileName>$([System.IO.Path]::GetFileNameWithoutExtension($(GameExePath)))</GameFileName>
@@ -34,10 +34,10 @@
     <PathSeparator Condition="'$(IsUnix)' == 'true'">/</PathSeparator>
     <ManagedAssembliesDir>$(GameDir)$(PathSeparator)$(GameFileName)_Data$(PathSeparator)Managed</ManagedAssembliesDir>
   </PropertyGroup>
-  <!-- 验证 GameExePath / Validate GameExePath -->
+	
   <Target Name="ValidateGameExePath" BeforeTargets="Build">
-    <Error Text="GameExePath 不能为空！请在 .csproj 文件中设置有效的游戏可执行文件路径。/ GameExePath cannot be empty! Please set a valid game executable path in .csproj file." Condition="'$(GameExePath)' == '' OR '$(GameExePath)' == 'GAME_EXE_PATH_PLACEHOLDER'" />
-    <Error Text="游戏可执行文件不存在：$(GameExePath)。请检查路径是否正确。/ Game executable does not exist: $(GameExePath). Please check if the path is correct." Condition="'$(GameExePath)' != '' AND !Exists('$(GameExePath)')" />
+    <Error Text="GameExePath cannot be empty! Please set a valid game executable path in .csproj file." Condition="'$(GameExePath)' == '' OR '$(GameExePath)' == 'GAME_EXE_PATH_PLACEHOLDER'" />
+    <Error Text="Game executable does not exist: $(GameExePath). Please check if the path is correct." Condition="'$(GameExePath)' != '' AND !Exists('$(GameExePath)')" />
   </Target>
   <ItemGroup>
     <Reference Include="0Harmony">
@@ -56,7 +56,7 @@
       <HintPath>$(ManagedAssembliesDir)\DOTweenPro.dll</HintPath>
     </Reference>
     <Reference Include="EditorTabLib">
-      <HintPath>D:\SteamLibrary\steamapps\common\A Dance of Fire and Ice\Mods\EditorTabLib\EditorTabLib.dll</HintPath>
+      <HintPath>$(GameDir)$(PathSeparator)Mods$(PathSeparator)EditorTabLib\EditorTabLib.dll</HintPath>
     </Reference>
     <Reference Include="Localizations">
       <HintPath>$(GameDir)$(PathSeparator)Mods$(PathSeparator)Localizations\Localizations.dll</HintPath>
@@ -316,6 +316,10 @@
   <ItemGroup>
     <Folder Include="Resources\" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.IO.Compression" Version="4.3.0" />
+    <PackageReference Include="System.Memory" Version="4.5.4" />
+  </ItemGroup>
   <Target Name="CopyToOut" AfterTargets="Build">
     <PropertyGroup>
       <OutDir>$(ProjectDir)out\</OutDir>
@@ -347,10 +351,10 @@
     <Copy SourceFiles="@(ModFiles)" DestinationFolder="$(ModsDir)" SkipUnchangedFiles="true" />
     <Copy SourceFiles="@(ModResourceFiles)" DestinationFolder="$(ModsDir)Resources\%(RecursiveDir)" SkipUnchangedFiles="true" />
     <Message Text="Mod deployed to game directory: $(ModsDir)" Importance="high" />
-    <!-- Windows 启动命令 / Windows launch command -->
-    <Exec Command="start &quot;&quot; &quot;$(GameExePath)&quot;" IgnoreExitCode="true" Condition="'$(AutoLaunchGame)' == 'true' AND '$(IsWindows)' == 'true'" />
-    <!-- Linux/Unix 启动命令 / Linux/Unix launch command -->
-    <Exec Command="chmod +x &quot;$(GameExePath)&quot; &amp;&amp; nohup &quot;$(GameExePath)&quot; > /dev/null 2>&amp;1 &amp;" IgnoreExitCode="true" Condition="'$(AutoLaunchGame)' == 'true' AND '$(IsUnix)' == 'true'" />
+    <!-- Windows launch command -->
+    <Exec Command="start &quot;&quot; /D &quot;$(GameDir)&quot; &quot;$(GameExePath)&quot;" IgnoreExitCode="true" Condition="'$(AutoLaunchGame)' == 'true' AND '$(IsWindows)' == 'true'" />
+    <!-- Linux/Unix launch command -->
+    <Exec Command="chmod +x &quot;$(GameExePath)&quot; &amp;&amp; nohup &quot;$(GameExePath)&quot; &gt; /dev/null 2&gt;&amp;1 &amp;" IgnoreExitCode="true" Condition="'$(AutoLaunchGame)' == 'true' AND '$(IsUnix)' == 'true'" />
     <Message Text="Game launched: $(GameExePath)" Importance="high" Condition="'$(AutoLaunchGame)' == 'true'" />
     <Message Text="Auto-launch disabled. Game not started." Importance="high" Condition="'$(AutoLaunchGame)' != 'true'" />
   </Target>

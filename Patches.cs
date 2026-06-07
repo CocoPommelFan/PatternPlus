@@ -20,11 +20,11 @@ namespace PatternPlus
         [HarmonyPatch(typeof(scnEditor), "Awake")]
         public static class EditorInstance
         {
-            public static scnEditor instance;
+            public static scnEditor Instance;
 
             public static void Prefix(scnEditor __instance)
             {
-                instance = __instance;
+                Instance = __instance;
             }
         }
     }
