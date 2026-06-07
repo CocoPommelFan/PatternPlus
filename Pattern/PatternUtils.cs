@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace PatternPlus.PatternType
+namespace PatternPlus.Pattern.Core
 {
     public static class PatternUtils
     {

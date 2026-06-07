@@ -1,12 +1,12 @@
 ﻿using EditorTabLib;
 using EditorTabLib.Properties;
-using PatternPlus.PatternType;
+using PatternPlus.Pattern;
+using PatternPlus.Pattern.Core.Base;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-namespace PatternPlus
-{
+namespace PatternPlus {
     static class CustomTab
     {
         public static void CreateTab(Sprite icon)
@@ -28,9 +28,9 @@ namespace PatternPlus
                     name: "showPreview",
                     value_default: true,
                     key: "ml.editor.showPreview"),
-                new Property_Enum<Pattern.PatternType>(
+                new Property_Enum<PatternType>(
                     name: "patternType",
-                    value_default: Pattern.PatternType.Circle,
+                    value_default: PatternType.Circle,
                     key: "ml.editor.patternType"),
                 new Property_InputField(
                     name: "pseudoAngle",
@@ -97,16 +97,20 @@ namespace PatternPlus
                 new Property_Button(
                     name: "create",
                     action: () => {
-                        scnEditor editor = Patches.EditorInstance.instance;
+                        scnEditor editor = Patches.EditorInstance.Instance;
                         
                         if (!editor.SelectionIsSingle() || editor.SelectionIsEmpty())
                         {
                             return;
                         }
                         
-                        Pattern.Create();
+                        ShapeController.Create();
                     },
-                    key: "ml.editor.create")
+                    key: "ml.editor.create"),
+                new Property_Button(
+                    name: "refresh",
+                    action: () => {},
+                    key: "ml.editor.refresh")
             },
             saveSetting: true
             );

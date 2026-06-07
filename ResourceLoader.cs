@@ -11,13 +11,12 @@ namespace PatternPlus
             get
             {
                 if (Main.Mod == null)
-                    throw new InvalidOperationException("Mod is not initialized / Mod 未初始化");
+                    throw new InvalidOperationException("Mod is not initialized");
                 
                 return Path.Combine(Main.Mod.Path, "Resources");
             }
         }
 
-        /// <returns>File content as string</returns>
         public static string LoadTextFile(string fileName)
         {
             string filePath = Path.Combine(ResourcesPath, fileName);
@@ -52,7 +51,7 @@ namespace PatternPlus
             
             if (!File.Exists(filePath))
             {
-                Main.Mod?.Logger.Error($"Image file not found / 图像文件未找到: {filePath}");
+                Main.Mod?.Logger.Error($"Image file not found: {filePath}");
                 return null;
             }
 
