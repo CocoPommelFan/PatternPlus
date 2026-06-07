@@ -40,11 +40,6 @@ namespace PatternPlus
             }
         }
 
-        /// <summary>
-        /// Loads an image file as a Texture2D from the Resources folder
-        /// </summary>
-        /// <param name="fileName">File name relative to Resources folder</param>
-        /// <returns>Texture2D or null if failed</returns>
         public static Texture2D LoadTexture(string fileName)
         {
             string filePath = Path.Combine(ResourcesPath, fileName);
@@ -78,11 +73,6 @@ namespace PatternPlus
             }
         }
 
-        /// <summary>
-        /// Loads binary data from a file in the Resources folder
-        /// </summary>
-        /// <param name="fileName">File name relative to Resources folder</param>
-        /// <returns>Byte array or empty array if failed</returns>
         public static byte[] LoadBinaryFile(string fileName)
         {
             string filePath = Path.Combine(ResourcesPath, fileName);
@@ -106,23 +96,12 @@ namespace PatternPlus
             }
         }
 
-        /// <summary>
-        /// Checks if a file exists in the Resources folder
-        /// </summary>
-        /// <param name="fileName">File name relative to Resources folder</param>
-        /// <returns>True if file exists</returns>
         public static bool FileExists(string fileName)
         {
             string filePath = Path.Combine(ResourcesPath, fileName);
             return File.Exists(filePath);
         }
 
-        /// <summary>
-        /// Gets all files in the Resources folder
-        /// </summary>
-        /// <param name="searchPattern">Search pattern (e.g., "*.txt")</param>
-        /// <param name="searchOption">Search option</param>
-        /// <returns>Array of file paths</returns>
         public static string[] GetFiles(string searchPattern = "*.*", SearchOption searchOption = SearchOption.AllDirectories)
         {
             try
